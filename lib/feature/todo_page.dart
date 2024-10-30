@@ -8,38 +8,63 @@ class TodoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TodoCubit(TodoRepository()),
-      child: BlocBuilder<TodoCubit, TodoState>(
-        builder: (context, state) {
-          if (state.todo.isNotEmpty) {
-            return DefaultTabController(
-              initialIndex: 1,
-              length: 2,
-              child: Scaffold(
-                appBar: AppBar(),
-                body: TabBarView(
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Todo List'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Completed'),
+              Tab(text: 'Not Completed'),
+            ],
+          ),
+        ),
+        body: BlocProvider(
+          create: (context) => TodoCubit(TodoRepository()),
+          child: BlocBuilder<TodoCubit, TodoState>(
+            builder: (context, state) {
+              if (state.notCompleted.isNotEmpty) {
+                return TabBarView(
                   children: [
-                    ListView.builder(itemBuilder: (context, index) {
-                      return SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Column(
-                          children: [
-                            Text('${state.todo[index].completed}'),
-                            Text('${state.todo[index].title}'),
-                          ],
-                        ),
-                      );
-                    }),
-                    Center(child: Text('B')),
+                    ListView.builder(
+                      itemCount: state.notCompleted.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: Column(
+                            children: [
+                              Text('${state.notCompleted[index].completed}'),
+                              Text('${state.notCompleted[index].title}'),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    ListView.builder(
+                      itemCount: state.completed.length,
+                      itemBuilder: (context, index) {
+                        return SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: Column(
+                            children: [
+                              Text('${state.completed[index].completed}'),
+                              Text('${state.completed[index].title}'),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ],
-                ),
-              ),
-            );
-          }
-          return Container();
-        },
+                );
+              }
+              return Container();
+            },
+          ),
+        ),
       ),
     );
   }

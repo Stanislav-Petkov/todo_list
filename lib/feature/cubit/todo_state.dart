@@ -1,7 +1,11 @@
 part of 'todo_cubit.dart';
 
 class TodoState {
-  TodoState(this.todo);
+  TodoState(
+      this.notCompleted,
+      this.completed
+      );
 
-  final List<TodoDto> todo;
+  final List<TodoDto> notCompleted;
+  final List<TodoDto> completed;
 }
